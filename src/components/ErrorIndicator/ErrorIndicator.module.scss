@@ -1,0 +1,13 @@
+.error {
+  margin-top: 114px;
+  padding: 20px;
+  color: red;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+.error > div {
+  text-transform: none;
+  font-size: 10px;
+  color: crimson;
+}

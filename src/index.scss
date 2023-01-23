@@ -1,0 +1,15 @@
+@import '../node_modules/normalize.css/normalize.css';
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300&display=swap');
+
+$background-main-color: #ebeef3;
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  line-height: 22px;
+  background-color: $background-main-color;
+}

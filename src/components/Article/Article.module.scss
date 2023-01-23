@@ -1,0 +1,131 @@
+.articleWrapper {
+  padding: 16px;
+  padding-left: 20px;
+  background-color: white;
+  box-shadow: 1px 1px 8px 1px rgba(168, 168, 168, 0.13);
+  border-radius: 5px;
+  margin-bottom: 24px;
+  width: 100%;
+}
+
+.headerWrapper {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.articleDescription {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  width: 72%;
+
+  header {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 8px;
+    word-wrap: break-word;
+
+    h5 {
+      margin: 0;
+      padding: 0;
+      font-size: 20px;
+      line-height: 28px;
+      margin-right: 8px;
+      color: #1890ff;
+      max-width: 85%;
+      transition: all ease .15s;
+
+      &:hover {
+        color: #157bdb;
+        cursor: pointer;
+      }
+    }
+
+    button {
+      border: none;
+      background-color: white;
+      color: rgb(151, 151, 151);
+    }
+
+    span {
+      color: rgb(151, 151, 151);
+      font-size: 12px;
+    }
+  }
+
+  .likesWrapper {
+    display: flex;
+    align-self: flex-start;
+    margin-top: 5px;
+  }
+
+  main {
+    font-size: 12px;
+    line-height: 22px;
+    color: rgba(0, 0, 0, 0.75);
+    word-break: break-word;
+    margin: 0;
+  }
+}
+
+.tagsWrapper {
+  display: flex;
+  margin-bottom: 8px;
+  font-size: 10px;
+
+  & > div {
+    margin-right: 8px;
+  }
+}
+
+.activeTag {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 20px;
+  border: 1px solid black;
+  border-radius: 2px;
+  padding: 4px;
+}
+
+.tag {
+  border: 1px solid rgb(131, 131, 131);
+  border-radius: 2px;
+  padding: 2px;
+  color: rgb(131, 131, 131);
+}
+
+.creatorDescription {
+  display: flex;
+  align-items: flex-start;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  margin-right: 16px;
+  align-items: flex-end;
+}
+
+.name {
+  margin: 0;
+  padding: 0;
+  inline-size: max-content;
+}
+
+.articleDate {
+  margin-top: 8px;
+  color: rgba(94, 94, 94, 0.685);
+  font-size: 12px;
+}
+
+.imageContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 46px;
+  height: 46px;
+  object-fit: cover;
+  border-radius: 50%;
+}
