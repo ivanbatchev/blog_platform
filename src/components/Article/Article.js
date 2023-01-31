@@ -73,7 +73,6 @@ const Article = ({ article, history, selected = false }) => {
       <ReactMarkdown>{body}</ReactMarkdown>
     </div>
   )
-  console.log(body)
 
   return (
     <div className={classes.articleWrapper}>

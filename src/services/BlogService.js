@@ -10,7 +10,7 @@ export default class BlogService {
     this.axiosInstance.defaults.headers.post['Content-Type'] = 'application/json'
   }
 
-  registerUser(username, email, password) {
+  registerNewUser(username, email, password) {
     return this.axiosInstance.post('/users', {
       user: {
         username: username,
@@ -20,11 +20,19 @@ export default class BlogService {
     })
   }
 
-  logInUser(email, password) {
+  tryToLogIn(email, password) {
     return this.axiosInstance.post('/users/login', {
       user: {
         email: email,
         password: password,
+      },
+    })
+  }
+
+  getCurrentLoggedInUser(token) {
+    return this.axiosInstance('/user', {
+      headers: {
+        Authorization: `Token ${token}`,
       },
     })
   }
@@ -37,27 +45,16 @@ export default class BlogService {
     return this.axiosInstance(`/articles/${slug}`)
   }
 
-  // DUMMY FUNCTIONS
-  // getArticles(offset) {
-  //   return new Promise((res) => {
-  //     setTimeout(() => {
-  //       res(data)
-  //     }, 500)
-  //   })
-  // }
-  // getFullArticle(slug) {
-  //   return new Promise((res) => {
-  //     setTimeout(() => {
-  //       res(article)
-  //     }, 700)
-  //   })
-  // }
-  // //login in immitation
-  tryToLogIn() {
-    return new Promise((res) => {
-      setTimeout(() => {
-        res(true)
-      }, 1000)
+  // EDITION Requests
+  updateUserInfo(token, email, password, username, imageUrl) {
+    this.axiosInstance.defaults.headers.put['Authorization'] = `Token ${token}`
+    return this.axiosInstance.put('/user', {
+      user: {
+        email: `${email}`,
+        password: `${password}`,
+        username: `${username}`,
+        image: `${imageUrl}`,
+      },
     })
   }
 }

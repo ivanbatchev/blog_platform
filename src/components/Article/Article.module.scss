@@ -34,7 +34,7 @@
       margin-right: 8px;
       color: #1890ff;
       max-width: 85%;
-      transition: all ease .15s;
+      transition: all ease 0.15s;
 
       &:hover {
         color: #157bdb;
@@ -83,10 +83,11 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 20px;
+  min-height: 16px;
+  min-width: 16px;
   border: 1px solid black;
   border-radius: 2px;
-  padding: 4px;
+  padding: 0 2px;
 }
 
 .tag {
@@ -104,8 +105,13 @@
 .info {
   display: flex;
   flex-direction: column;
-  margin-right: 16px;
   align-items: flex-end;
+  margin-right: 16px;
+
+  .articleDate {
+    align-items: flex-end;
+    inline-size: max-content;
+  }
 }
 
 .name {

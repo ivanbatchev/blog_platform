@@ -22,11 +22,15 @@ const App = () => (
       />
       <Route path={'/sign-up'} component={SignUpPage} />
       <Route path={'/sign-in'} component={SignInPage} />
-      <Route path={'/edit'} component={EditProfilePage} />
+      <Route path={'/profile'} component={EditProfilePage} />
       <Route
         path={'/articles/:id'}
-        render={({ match }) => {
-          return <ArticleDetails slug={match.params.id} />
+        render={({
+          match: {
+            params: { id },
+          },
+        }) => {
+          return <ArticleDetails slug={id} />
         }}
       />
     </Switch>

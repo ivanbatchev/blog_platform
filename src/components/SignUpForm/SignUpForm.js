@@ -1,99 +1,133 @@
 import React, { useState, useRef } from 'react'
-import { Checkbox } from '@mui/material'
-import { Link } from 'react-router-dom'
+import { Checkbox, CircularProgress } from '@mui/material'
+import { Link, withRouter } from 'react-router-dom'
+import { useForm } from 'react-hook-form'
+import { connect } from 'react-redux'
+
+import { onNewUserRegistration, handleNewDataInput } from '../../redux/actions'
 
 import classes from './SignUpForm.module.scss'
 
-const SignUpForm = () => {
-  const password = useRef()
-  const mathingPassword = useRef()
-  const [isValidPassword, setPasswordValidation] = useState(true)
-  const [arePasswordsMatching, setMatching] = useState(true)
+const SignUpForm = ({ onNewUserRegistration, userStatus, requestStatus, handleNewDataInput, history }) => {
   const [createButtonDisabled, setButtonDisability] = useState(false)
-  // stylesForValidation
-  const passwordLengthStyle = {
-    color: 'red',
-    fontSize: '12px',
-    position: 'absolute',
-    marginTop: '60px',
-  }
-  const passwordMatchStyle = {
-    color: 'red',
-    fontSize: '12px',
-    position: 'absolute',
-    marginTop: '60px',
-  }
-  const redBorderStyle = {
-    border: '1px solid red',
-  }
-  // FORM VALIDATION
-  const validatePassword = (passwordValue) => {
-    setPasswordValidation(passwordValue.length < 6 ? false : true)
-    if (passwordValue.length === 0) {
-      setPasswordValidation(true)
-    }
-    if (passwordValue.length < 6 && passwordValue.length !== 0) {
-      setButtonDisability(true)
-    } else {
-      setButtonDisability(false)
-    }
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    watch,
+  } = useForm()
+
+  const password = useRef({})
+  password.current = watch('password', '')
+  const onSubmit = ({ username, email, password }) => {
+    onNewUserRegistration(username, email, password, history)
   }
 
-  const checkPasswordsMatch = () => {
-    const passwordsAreEqual = password.current.value === mathingPassword.current.value
-    setMatching(passwordsAreEqual ? true : false)
-    if (mathingPassword.current.value.length === 0) {
-      setMatching(true)
-    }
-
-    if (!passwordsAreEqual) {
-      setButtonDisability(true)
-    } else {
-      setButtonDisability(false)
-    }
+  // error style
+  const error = {
+    outline: '1px solid red',
   }
-
   return (
-    <form className={classes.signUpForm}>
+    <form
+      className={classes.signUpForm}
+      onSubmit={handleSubmit(onSubmit)}
+      onChange={() => {
+        if (userStatus !== null) {
+          handleNewDataInput()
+        }
+      }}
+    >
       <h4>Create new account</h4>
       <label>
         Username
-        <input type="text" placeholder="Username" required></input>
+        <input
+          style={errors?.username || userStatus?.username ? error : null}
+          name="username"
+          {...register('username', {
+            required: {
+              value: true,
+              message: 'This field is required',
+            },
+            minLength: {
+              value: 3,
+              message: 'Username must be at least 3 characters',
+            },
+            maxLength: {
+              value: 20,
+              message: 'Username must be less than 20 characters',
+            },
+          })}
+          type="text"
+          placeholder="Username"
+          autoComplete="off"
+        ></input>
+        {<p className={classes.error}>{errors.username && errors.username.message}</p>}
+        {<p className={classes.error}>{userStatus?.username ? `Username: ${userStatus.username}` : null}</p>}
       </label>
       <label>
         Email address
-        <input type="email" placeholder="Email address" required></input>
+        <input
+          style={errors?.email || userStatus?.email ? error : null}
+          name="email"
+          {...register('email', {
+            required: {
+              value: true,
+              message: 'This field is required',
+            },
+            pattern: {
+              value: /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/i,
+              message: 'Invalid email address',
+            },
+          })}
+          type="email"
+          placeholder="Email address"
+          autoComplete="off"
+        ></input>
+        {<p className={classes.error}>{errors.email && errors.email.message}</p>}
+        {<p className={classes.error}>{userStatus?.email ? `Email ${userStatus.email}` : null}</p>}
       </label>
+
       <label>
         Password
         <input
-          ref={password}
+          style={errors?.password ? error : null}
+          name="password"
+          {...register('password', {
+            required: {
+              value: true,
+              message: 'This field is required',
+            },
+            minLength: {
+              value: 6,
+              message: 'Your password needs to be at least 6 characters',
+            },
+            maxLength: {
+              value: 40,
+              message: 'Your password needs to be not more than 40 characters',
+            },
+          })}
           type="password"
           placeholder="Password"
-          required
-          style={!isValidPassword ? redBorderStyle : null}
-          onChange={({ target: { value: passwordValue } }) => {
-            validatePassword(passwordValue)
-            checkPasswordsMatch()
-          }}
         ></input>
-        <span style={!isValidPassword ? passwordLengthStyle : null} hidden={isValidPassword}>
-          Your password needs to be at least 6 chracters.
-        </span>
+        {<p className={classes.error}>{errors.password && errors.password.message}</p>}
       </label>
+
       <label>
         Repeat password
         <input
-          ref={mathingPassword}
+          style={errors?.repeat_password ? error : null}
+          name="repeat_password"
+          {...register('repeat_password', {
+            required: {
+              value: true,
+              message: 'This field is required',
+            },
+            validate: (value) => value === password.current || 'Passwords must match',
+          })}
           type="password"
           placeholder="Password"
-          required
-          style={!arePasswordsMatching ? redBorderStyle : null}
-          onChange={checkPasswordsMatch}
         ></input>
-        <span style={!arePasswordsMatching ? passwordMatchStyle : null} hidden={arePasswordsMatching}>
-          Passwords must match
-        </span>
+        {<p className={classes.error}>{errors.repeat_password && errors.repeat_password.message}</p>}
       </label>
       <hr className={classes.hLine}></hr>
       <label className={classes.infoProcessing}>
@@ -107,11 +141,12 @@ const SignUpForm = () => {
         I agree to the processing of my personal information
       </label>
       <button
-        disabled={createButtonDisabled}
-        style={!createButtonDisabled ? null : { opacity: '0.5' }}
+        type="submit"
+        disabled={createButtonDisabled || requestStatus === 'loading'}
+        style={createButtonDisabled ? { opacity: '0.5' } : null}
         className={classes.createButton}
       >
-        Create
+        {requestStatus === 'loading' ? <CircularProgress color="warning" size={12} /> : 'Create'}
       </button>
       <div className={classes.haveAccount}>
         Already have an account? <Link to="/sign-in"> Sign In.</Link>
@@ -120,4 +155,15 @@ const SignUpForm = () => {
   )
 }
 
-export default SignUpForm
+const mapStateToProps = ({ authReducer: { userStatus, requestStatus } }) => {
+  return {
+    userStatus,
+    requestStatus,
+  }
+}
+
+const mapDispatchToProps = {
+  onNewUserRegistration,
+  handleNewDataInput,
+}
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(SignUpForm))

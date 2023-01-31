@@ -4,11 +4,6 @@ import thunk from 'redux-thunk'
 
 import rootReducer from './reducers'
 
-const loggerMiddleWare = (store) => (next) => (action) => {
-  const result = next(action)
-  return result
-}
-
-const store = legacy_createStore(rootReducer, composeWithDevTools(applyMiddleware(thunk, loggerMiddleWare)))
+const store = legacy_createStore(rootReducer, composeWithDevTools(applyMiddleware(thunk)))
 
 export default store
