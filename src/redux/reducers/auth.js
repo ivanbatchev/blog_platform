@@ -8,7 +8,7 @@ import {
 } from '../actions/actionTypes'
 
 const initialState = {
-  isUserLoggedIn: localStorage.getItem('loggedIn'),
+  isUserLoggedIn: localStorage.getItem('loggedIn') ? localStorage.getItem('loggedIn') : false,
   userStatus: null,
   requestStatus: null,
   userInfoWhenLoggedIn: localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')) : null,

@@ -57,4 +57,45 @@ export default class BlogService {
       },
     })
   }
+
+  // new article creation
+  createNewArticle(token, article) {
+    this.axiosInstance.defaults.headers.post['Authorization'] = `Token ${token}`
+    return this.axiosInstance.post('/articles', {
+      article: {
+        title: article.title,
+        description: article.description,
+        body: article.body,
+        tagList: article.tagList,
+      },
+    })
+  }
+
+  // edit article
+  editArticle(token, article, slug) {
+    this.axiosInstance.defaults.headers.put['Authorization'] = `Token ${token}`
+    return this.axiosInstance.put(`/articles/${slug}`, {
+      article: {
+        title: article.title,
+        description: article.description,
+        body: article.body,
+        tagList: article.tagList,
+      },
+    })
+  }
+  //delete article
+  deleteArticle(token, slug) {
+    this.axiosInstance.defaults.headers.delete['Authorization'] = `Token ${token}`
+    return this.axiosInstance.delete(`/articles/${slug}`)
+  }
+  // like article
+  likePost(token, slug) {
+    this.axiosInstance.defaults.headers.post['Authorization'] = `Token ${token}`
+    return this.axiosInstance.post(`/articles/${slug}/favorite`)
+  }
+  // dislike articles
+  dislikeArticle(token, slug) {
+    this.axiosInstance.defaults.headers.delete['Authorization'] = `Token ${token}`
+    return this.axiosInstance.delete(`/articles/${slug}/favorite`)
+  }
 }

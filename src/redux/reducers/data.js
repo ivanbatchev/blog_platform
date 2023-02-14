@@ -7,7 +7,7 @@ const initialState = {
   error: null,
   articlesCount: 0,
   pageCount: 0,
-  selectedArticle: null,
+  selectedArticle: localStorage.getItem('selectedArticle') ? JSON.parse(localStorage.getItem('selectedArticle')) : null,
 }
 
 const dataReducer = (state = initialState, action) => {

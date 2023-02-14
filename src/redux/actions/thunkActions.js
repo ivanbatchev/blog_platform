@@ -13,6 +13,10 @@ import {
   handleRequestEdition,
   handleSuccesfulEdition,
   handleErrorEdition,
+  handleArticleCreation,
+  requestArticleAction,
+  handleArticleEdition,
+  handleArticleDelete,
 } from '../actions'
 
 const blogService = new BlogService()
@@ -78,6 +82,7 @@ function onArticleSelection(slug) {
   return (dispatch) => {
     dispatch(requestData())
     blogService.getFullArticle(slug).then((result) => {
+      localStorage.setItem('selectedArticle', JSON.stringify(result.data.article))
       dispatch(articleSelected(result.data.article))
     })
   }
@@ -105,4 +110,57 @@ function onProfileEdition(email, password, username, imageUrl = image, history) 
   }
 }
 
-export { onPageChange, onPageLoad, onLoginFormSubmition, onArticleSelection, onNewUserRegistration, onProfileEdition }
+// article creation
+function onArticleCreation(article, history) {
+  const token = store.getState().authReducer.userInfoWhenLoggedIn?.token
+  article.tagList.pop()
+  return (dispatch) => {
+    dispatch(requestArticleAction())
+    blogService
+      .createNewArticle(token, article)
+      .then((resp) => {
+        dispatch(handleArticleCreation(resp.data))
+        history.push('/articles')
+      })
+      .catch((error) => {
+        dispatch(handleErrorEdition(error))
+      })
+  }
+}
+
+//article edition
+function onArticleEdition(article, history, slug) {
+  const token = store.getState().authReducer.userInfoWhenLoggedIn?.token
+  article.tagList.pop()
+  return (dispatch) => {
+    dispatch(requestArticleAction())
+    blogService.editArticle(token, article, slug).then((resp) => {
+      dispatch(handleArticleEdition(resp.data.article))
+      history.push('/articles')
+    })
+  }
+}
+
+//articleDelete
+function onArticleDelete(slug, history) {
+  const token = store.getState().authReducer.userInfoWhenLoggedIn?.token
+  return (dispatch) => {
+    dispatch(requestArticleAction())
+    blogService.deleteArticle(token, slug).then((resp) => {
+      handleArticleDelete(resp.data)
+      history.push('/articles')
+    })
+  }
+}
+
+export {
+  onPageChange,
+  onPageLoad,
+  onLoginFormSubmition,
+  onArticleSelection,
+  onNewUserRegistration,
+  onProfileEdition,
+  onArticleCreation,
+  onArticleEdition,
+  onArticleDelete,
+}

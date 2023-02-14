@@ -8,7 +8,7 @@ import { userLoggedOut } from '../../redux/actions'
 
 import classes from './Header.module.scss'
 
-const Header = ({ isUserLoggedIn, image, userLoggedOut, history, userStatus, loginError, userInfoWhenLoggedIn }) => {
+const Header = ({ isUserLoggedIn, userLoggedOut, history, userStatus, loginError, userInfoWhenLoggedIn }) => {
   const [openSuccessRegistration, setOpenSuccessRegistration] = useState(false)
   const [openOnLoginError, setOpenOnLoginError] = useState(false)
   useEffect(() => {
@@ -45,7 +45,14 @@ const Header = ({ isUserLoggedIn, image, userLoggedOut, history, userStatus, log
   )
   const loggedInMenu = (
     <div className={classes.loggedInWrapped}>
-      <button className={classes.createArticleButton}>Create article</button>
+      <button
+        className={classes.createArticleButton}
+        onClick={() => {
+          history.push('/new-article')
+        }}
+      >
+        Create article
+      </button>
       <div
         className={classes.userInfo}
         onClick={() => {

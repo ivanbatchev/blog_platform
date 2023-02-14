@@ -5,6 +5,9 @@ import {
   onLoginFormSubmition,
   onArticleSelection,
   onProfileEdition,
+  onArticleCreation,
+  onArticleEdition,
+  onArticleDelete,
 } from './thunkActions'
 import {
   DATA_LOADED,
@@ -21,6 +24,10 @@ import {
   EDIT_COMPLETE_SUCCESFULLY,
   EDIT_COMPLETE_WITH_ERROR,
   REQUEST_EDIT,
+  NEW_ARTICLE_CREATED,
+  REQUESTED_ARTICLE_ACTION,
+  ARTICLE_EDITED,
+  ARTICLE_DELETED,
 } from './actionTypes'
 
 const dataLoaded = (articles, articlesCount) => {
@@ -122,6 +129,34 @@ const handleRequestEdition = () => {
   }
 }
 
+//Article creation
+const requestArticleAction = () => {
+  return {
+    type: REQUESTED_ARTICLE_ACTION,
+  }
+}
+
+const handleArticleCreation = (article) => {
+  return {
+    type: NEW_ARTICLE_CREATED,
+    payload: article,
+  }
+}
+
+const handleArticleEdition = (article) => {
+  return {
+    type: ARTICLE_EDITED,
+    payload: article,
+  }
+}
+
+const handleArticleDelete = (resp) => {
+  return {
+    type: ARTICLE_DELETED,
+    payload: resp,
+  }
+}
+
 export {
   dataLoaded,
   requestData,
@@ -145,4 +180,16 @@ export {
   handleRequestEdition,
   // Thunk actions
   onProfileEdition,
+  //=================
+  // Article creation
+  handleArticleCreation,
+  requestArticleAction,
+  // article edition
+  handleArticleEdition,
+  // article delete
+  handleArticleDelete,
+  // async actions
+  onArticleCreation,
+  onArticleEdition,
+  onArticleDelete,
 }
