@@ -37,7 +37,10 @@ export default class BlogService {
     })
   }
 
-  getArticles(offset = 1) {
+  getArticles(offset = 1, token) {
+    if (token) {
+      this.axiosInstance.defaults.headers.get['Authorization'] = `Token ${token}`
+    }
     return this.axiosInstance(`/articles?offset=${offset - 1}`)
   }
 

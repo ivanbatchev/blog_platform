@@ -1,17 +1,26 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { withRouter } from 'react-router-dom'
 import uniqid from 'uniqid'
 import { connect } from 'react-redux'
 import { ReactMarkdown } from 'react-markdown/lib/react-markdown'
 import { Popover } from '@mui/material'
 
-import { onArticleDelete } from '../../redux/actions'
+import { onArticleDelete, onArticleLike, onArticleDislike } from '../../redux/actions'
 import { dateFormat } from '../../utils/dateFormater'
-import { exclamation, like } from '../../assets/icons'
+import { exclamation, like, liked } from '../../assets/icons'
 
 import classes from './Article.module.scss'
 
-const Article = ({ article, history, selected = false, userInfoWhenLoggedIn, onArticleDelete }) => {
+const Article = ({
+  article,
+  history,
+  selected = false,
+  userInfoWhenLoggedIn,
+  onArticleDelete,
+  onArticleLike,
+  isUserLoggedIn,
+  onArticleDislike,
+}) => {
   // working with popover
   const [anchorEl, setAnchorEl] = React.useState(null)
 
@@ -25,7 +34,6 @@ const Article = ({ article, history, selected = false, userInfoWhenLoggedIn, onA
 
   const open = Boolean(anchorEl)
   const id = open ? 'simple-popover' : undefined
-
   const {
     description,
     title,
@@ -35,6 +43,9 @@ const Article = ({ article, history, selected = false, userInfoWhenLoggedIn, onA
     favoritesCount,
     body,
   } = article
+
+  const [likesCount, setLikesCount] = useState(favoritesCount)
+  const [isLiked, setLikeStatus] = useState(article.favorited)
 
   const handleArticleDelete = () => {
     onArticleDelete(article.slug, history)
@@ -54,9 +65,24 @@ const Article = ({ article, history, selected = false, userInfoWhenLoggedIn, onA
           </h5>
           <div className={classes.likesWrapper}>
             <button>
-              <img src={like} alt="like-button" />
+              <img
+                src={isLiked ? liked : like}
+                alt="like-button"
+                onClick={() => {
+                  if (!isLiked && isUserLoggedIn) {
+                    setLikeStatus(true)
+                    setLikesCount((current) => current + 1)
+                    onArticleLike(article.slug)
+                  }
+                  if (isLiked && isUserLoggedIn) {
+                    setLikeStatus(false)
+                    setLikesCount((current) => current - 1)
+                    onArticleDislike(article.slug)
+                  }
+                }}
+              />
             </button>
-            <span>{favoritesCount === 0 ? '' : favoritesCount}</span>
+            <span>{likesCount === 0 ? '' : likesCount}</span>
           </div>
         </header>
         <div className={classes.tagsWrapper}>
@@ -152,15 +178,21 @@ const Article = ({ article, history, selected = false, userInfoWhenLoggedIn, onA
   )
 }
 
-const mapStateToProps = ({ authReducer: { userInfoWhenLoggedIn }, dataReducer: { selectedArticle } }) => {
+const mapStateToProps = ({
+  authReducer: { userInfoWhenLoggedIn, isUserLoggedIn },
+  dataReducer: { selectedArticle },
+}) => {
   return {
     userInfoWhenLoggedIn,
     selectedArticle,
+    isUserLoggedIn,
   }
 }
 
 const mapDispatchToProps = {
+  onArticleLike,
   onArticleDelete,
+  onArticleDislike,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Article))

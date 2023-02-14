@@ -8,6 +8,8 @@ import {
   onArticleCreation,
   onArticleEdition,
   onArticleDelete,
+  onArticleLike,
+  onArticleDislike,
 } from './thunkActions'
 import {
   DATA_LOADED,
@@ -28,6 +30,8 @@ import {
   REQUESTED_ARTICLE_ACTION,
   ARTICLE_EDITED,
   ARTICLE_DELETED,
+  ARTICLE_LIKED,
+  ARTICLE_DISLIKED,
 } from './actionTypes'
 
 const dataLoaded = (articles, articlesCount) => {
@@ -157,6 +161,17 @@ const handleArticleDelete = (resp) => {
   }
 }
 
+const handleArticleLike = () => {
+  return {
+    type: ARTICLE_LIKED,
+  }
+}
+
+const handleArticleDislike = () => {
+  return {
+    type: ARTICLE_DISLIKED,
+  }
+}
 export {
   dataLoaded,
   requestData,
@@ -188,8 +203,14 @@ export {
   handleArticleEdition,
   // article delete
   handleArticleDelete,
+  // article likes
+  handleArticleLike,
+  // article dislike
+  handleArticleDislike,
   // async actions
   onArticleCreation,
   onArticleEdition,
   onArticleDelete,
+  onArticleLike,
+  onArticleDislike,
 }

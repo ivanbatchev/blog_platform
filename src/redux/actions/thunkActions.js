@@ -17,6 +17,8 @@ import {
   requestArticleAction,
   handleArticleEdition,
   handleArticleDelete,
+  handleArticleLike,
+  handleArticleDislike,
 } from '../actions'
 
 const blogService = new BlogService()
@@ -27,11 +29,11 @@ const onPageChange = (pageNumber) => {
     dispatch(onPageLoad(pageNumber))
   }
 }
-const onPageLoad = (pageNumber) => {
+const onPageLoad = (pageNumber, token) => {
   return (dispatch) => {
     dispatch(requestData())
     blogService
-      .getArticles(pageNumber)
+      .getArticles(pageNumber, token ? token : null)
       .then((result) => {
         dispatch(dataLoaded(result.data.articles, result.data.articlesCount))
       })
@@ -153,6 +155,23 @@ function onArticleDelete(slug, history) {
   }
 }
 
+function onArticleLike(slug) {
+  const token = store.getState().authReducer.userInfoWhenLoggedIn?.token
+  return (dispatch) => {
+    blogService.likePost(token, slug).then((resp) => {
+      dispatch(handleArticleLike())
+    })
+  }
+}
+
+function onArticleDislike(slug) {
+  const token = store.getState().authReducer.userInfoWhenLoggedIn?.token
+  return (dispatch) => {
+    blogService.dislikeArticle(token, slug).then((resp) => {
+      dispatch(handleArticleDislike())
+    })
+  }
+}
 export {
   onPageChange,
   onPageLoad,
@@ -163,4 +182,6 @@ export {
   onArticleCreation,
   onArticleEdition,
   onArticleDelete,
+  onArticleLike,
+  onArticleDislike,
 }

@@ -1,3 +1,5 @@
 import like from './like.svg'
 import exclamation from './exclamationPopup.svg'
-export { like, exclamation }
+import liked from './liked.svg'
+
+export { like, exclamation, liked }
