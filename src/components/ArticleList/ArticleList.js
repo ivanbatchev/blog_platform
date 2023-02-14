@@ -11,9 +11,23 @@ import ErrorIndicator from '../ErrorIndicator'
 
 import classes from './ArticleList.module.scss'
 
-const ArticleList = ({ data, loading, error, pageCount, page, onPageLoad, onPageChange }) => {
+const ArticleList = ({
+  data,
+  loading,
+  error,
+  pageCount,
+  page,
+  onPageLoad,
+  onPageChange,
+  isUserLoggedIn,
+  userInfoWhenLoggedIn,
+}) => {
   useEffect(() => {
-    onPageLoad(page)
+    if (isUserLoggedIn) {
+      onPageLoad(page, userInfoWhenLoggedIn.token)
+    } else {
+      onPageLoad(page)
+    }
   }, [])
 
   const pagination = (
@@ -44,13 +58,18 @@ const ArticleList = ({ data, loading, error, pageCount, page, onPageLoad, onPage
   )
 }
 
-const mapStateToProps = ({ dataReducer: { data, loading, error, pageCount, page } }) => {
+const mapStateToProps = ({
+  dataReducer: { data, loading, error, pageCount, page },
+  authReducer: { isUserLoggedIn, userInfoWhenLoggedIn },
+}) => {
   return {
     data,
     page,
     loading,
     error,
     pageCount,
+    isUserLoggedIn,
+    userInfoWhenLoggedIn,
   }
 }
 

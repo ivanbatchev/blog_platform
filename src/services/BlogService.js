@@ -10,7 +10,7 @@ export default class BlogService {
     this.axiosInstance.defaults.headers.post['Content-Type'] = 'application/json'
   }
 
-  registerUser(username, email, password) {
+  registerNewUser(username, email, password) {
     return this.axiosInstance.post('/users', {
       user: {
         username: username,
@@ -20,7 +20,7 @@ export default class BlogService {
     })
   }
 
-  logInUser(email, password) {
+  tryToLogIn(email, password) {
     return this.axiosInstance.post('/users/login', {
       user: {
         email: email,
@@ -29,7 +29,18 @@ export default class BlogService {
     })
   }
 
-  getArticles(offset = 1) {
+  getCurrentLoggedInUser(token) {
+    return this.axiosInstance('/user', {
+      headers: {
+        Authorization: `Token ${token}`,
+      },
+    })
+  }
+
+  getArticles(offset = 1, token) {
+    if (token) {
+      this.axiosInstance.defaults.headers.get['Authorization'] = `Token ${token}`
+    }
     return this.axiosInstance(`/articles?offset=${offset - 1}`)
   }
 
@@ -37,27 +48,57 @@ export default class BlogService {
     return this.axiosInstance(`/articles/${slug}`)
   }
 
-  // DUMMY FUNCTIONS
-  // getArticles(offset) {
-  //   return new Promise((res) => {
-  //     setTimeout(() => {
-  //       res(data)
-  //     }, 500)
-  //   })
-  // }
-  // getFullArticle(slug) {
-  //   return new Promise((res) => {
-  //     setTimeout(() => {
-  //       res(article)
-  //     }, 700)
-  //   })
-  // }
-  // //login in immitation
-  tryToLogIn() {
-    return new Promise((res) => {
-      setTimeout(() => {
-        res(true)
-      }, 1000)
+  // EDITION Requests
+  updateUserInfo(token, email, password, username, imageUrl) {
+    this.axiosInstance.defaults.headers.put['Authorization'] = `Token ${token}`
+    return this.axiosInstance.put('/user', {
+      user: {
+        email: `${email}`,
+        password: `${password}`,
+        username: `${username}`,
+        image: `${imageUrl}`,
+      },
     })
+  }
+
+  // new article creation
+  createNewArticle(token, article) {
+    this.axiosInstance.defaults.headers.post['Authorization'] = `Token ${token}`
+    return this.axiosInstance.post('/articles', {
+      article: {
+        title: article.title,
+        description: article.description,
+        body: article.body,
+        tagList: article.tagList,
+      },
+    })
+  }
+
+  // edit article
+  editArticle(token, article, slug) {
+    this.axiosInstance.defaults.headers.put['Authorization'] = `Token ${token}`
+    return this.axiosInstance.put(`/articles/${slug}`, {
+      article: {
+        title: article.title,
+        description: article.description,
+        body: article.body,
+        tagList: article.tagList,
+      },
+    })
+  }
+  //delete article
+  deleteArticle(token, slug) {
+    this.axiosInstance.defaults.headers.delete['Authorization'] = `Token ${token}`
+    return this.axiosInstance.delete(`/articles/${slug}`)
+  }
+  // like article
+  likePost(token, slug) {
+    this.axiosInstance.defaults.headers.post['Authorization'] = `Token ${token}`
+    return this.axiosInstance.post(`/articles/${slug}/favorite`)
+  }
+  // dislike articles
+  dislikeArticle(token, slug) {
+    this.axiosInstance.defaults.headers.delete['Authorization'] = `Token ${token}`
+    return this.axiosInstance.delete(`/articles/${slug}/favorite`)
   }
 }
