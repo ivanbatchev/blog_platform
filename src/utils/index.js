@@ -1,2 +1,3 @@
 import compose from './compose'
-export { compose }
+import { dateFormater } from './dateFormater'
+export { compose, dateFormater }

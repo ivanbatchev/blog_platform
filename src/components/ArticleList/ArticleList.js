@@ -30,17 +30,12 @@ const ArticleList = ({
     }
   }, [])
 
+  const handlePaginationChange = ({ target: { innerText: pageNumber } }) => {
+    onPageChange(+pageNumber)
+    window.scrollTo(0, 0)
+  }
   const pagination = (
-    <Pagination
-      page={page}
-      count={pageCount}
-      shape="rounded"
-      color={'primary'}
-      onChange={({ target: { innerText: pageNumber } }) => {
-        onPageChange(+pageNumber)
-        window.scrollTo(0, 0)
-      }}
-    />
+    <Pagination page={page} count={pageCount} shape="rounded" color={'primary'} onChange={handlePaginationChange} />
   )
 
   const articleList = data.map((article) => {

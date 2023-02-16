@@ -3,8 +3,8 @@ import React, { useState, useRef, useEffect } from 'react'
 import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { useForm } from 'react-hook-form'
-import uniqid from 'uniqid'
 
+import { ROOT } from '../../routes'
 import { onArticleCreation, onArticleEdition } from '../../redux/actions'
 import Spinner from '../Spinner'
 
@@ -18,10 +18,8 @@ const NewArticle = ({
   newArticleCreationStatus,
   onArticleEdition,
 }) => {
-  console.log(selectedArticle?.slug)
-
   if (selectedArticle === null) {
-    history.push('/')
+    history.push(ROOT)
   }
   const inputRef = useRef(null)
   const [tagList, setTagList] = useState([''])
@@ -124,7 +122,7 @@ const NewArticle = ({
           <div className={classes.tagListContainer}>
             {tagList.map((item, index) => {
               return (
-                <div className={classes.tagItemContainer} key={uniqid()}>
+                <div className={classes.tagItemContainer} key={selectedArticle?.slug + item + index}>
                   <input
                     placeholder="Tag"
                     autoComplete="off"

@@ -1,3 +1,4 @@
+import { getInfoFromBrowser } from '../../services/LocalStorageService'
 import {
   USER_REGISTRATED,
   LOGINFORM_SUBMITED,
@@ -8,10 +9,10 @@ import {
 } from '../actions/actionTypes'
 
 const initialState = {
-  isUserLoggedIn: localStorage.getItem('loggedIn') ? localStorage.getItem('loggedIn') : false,
+  isUserLoggedIn: getInfoFromBrowser('loggedIn') ? getInfoFromBrowser('loggedIn') : false,
   userStatus: null,
   requestStatus: null,
-  userInfoWhenLoggedIn: localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')) : null,
+  userInfoWhenLoggedIn: getInfoFromBrowser('userInfo') ? JSON.parse(getInfoFromBrowser('userInfo')) : null,
   loginError: null,
 }
 

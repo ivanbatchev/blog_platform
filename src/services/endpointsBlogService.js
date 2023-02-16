@@ -1,0 +1,6 @@
+export const USERS_URL = '/users'
+export const LOGIN_URL = '/users/login'
+export const USER_URL = '/user'
+export const ARTICLES_URL = '/articles/'
+export const FAVORITE_URL = '/favorite'
+export const BUNCH_OF_ARTICLES_URL = '/articles?offset='

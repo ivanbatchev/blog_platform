@@ -136,6 +136,9 @@
   height: 46px;
   object-fit: cover;
   border-radius: 50%;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center center;
 }
 
 .buttonsContainer {
@@ -197,6 +200,7 @@
   height: 24px;
   color: #595959;
   transition: all ease 0.15s;
+  margin-right: 8px;
 
   &:hover {
     color: white;
@@ -215,6 +219,7 @@
   height: 24px;
   color: white;
   transition: all ease 0.15s;
+  margin-right: 16px;
 
   &:hover {
     opacity: 0.75;
@@ -222,5 +227,32 @@
 
   &:active {
     opacity: 0.55;
+  }
+}
+
+.deleteModalContainer {
+  width: 240px;
+  display: flex;
+  flex-direction: column;
+
+  .headerContainer {
+    display: flex;
+  }
+
+  img {
+    align-self: flex-start;
+    margin: 16px;
+  }
+
+  p {
+    margin: 0;
+    padding: 0;
+    margin-top: 8px;
+    margin-bottom: 16px;
+  }
+
+  .modalButtonsContainer {
+    align-self: flex-end;
+    margin-bottom: 8px;
   }
 }

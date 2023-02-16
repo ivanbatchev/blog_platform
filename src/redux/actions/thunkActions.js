@@ -20,6 +20,12 @@ import {
   handleArticleLike,
   handleArticleDislike,
 } from '../actions'
+import { ARTICLES, SIGN_IN } from '../../routes'
+import {
+  saveLoginStatus,
+  saveSelectedArticleIntoBrowser,
+  saveUserInfoIntoBrowser,
+} from '../../services/LocalStorageService'
 
 const blogService = new BlogService()
 
@@ -50,11 +56,10 @@ const onLoginFormSubmition = (email, password, history) => {
       .then((resp) => {
         blogService.getCurrentLoggedInUser(resp.data.user.token).then((resp) => {
           dispatch(tryingToLogin(resp.data.user, true))
-          localStorage.setItem('username', resp.data.user.username)
-          localStorage.setItem('userInfo', JSON.stringify(resp.data.user))
+          saveUserInfoIntoBrowser(resp.data.user)
         })
-        localStorage.setItem('loggedIn', true)
-        history.push('/articles')
+        saveLoginStatus(true)
+        history.push(ARTICLES)
       })
       .catch((errors) => {
         dispatch(handleLoginError(errors.response?.data?.errors))
@@ -71,7 +76,7 @@ const onNewUserRegistration = (username, email, password, history) => {
       .then((resp) => {
         dispatch(tryingToRegister(resp.data))
         dispatch(requestedUserData('loaded'))
-        history.push('/sign-in')
+        history.push(SIGN_IN)
       })
       .catch((error) => {
         dispatch(tryingToRegister(error.response.data.errors))
@@ -84,7 +89,7 @@ function onArticleSelection(slug) {
   return (dispatch) => {
     dispatch(requestData())
     blogService.getFullArticle(slug).then((result) => {
-      localStorage.setItem('selectedArticle', JSON.stringify(result.data.article))
+      saveSelectedArticleIntoBrowser(result.data.article)
       dispatch(articleSelected(result.data.article))
     })
   }
@@ -102,9 +107,8 @@ function onProfileEdition(email, password, username, imageUrl = image, history) 
       .updateUserInfo(token, email, password, username, imageUrl)
       .then((resp) => {
         dispatch(handleSuccesfulEdition(resp.data))
-        localStorage.setItem('username', resp.data.user.username)
-        localStorage.setItem('userInfo', JSON.stringify(resp.data.user))
-        history.push('/articles')
+        saveUserInfoIntoBrowser(resp.data.user)
+        history.push(ARTICLES)
       })
       .catch((error) => {
         dispatch(handleErrorEdition(error.response.data.errors))
@@ -122,7 +126,7 @@ function onArticleCreation(article, history) {
       .createNewArticle(token, article)
       .then((resp) => {
         dispatch(handleArticleCreation(resp.data))
-        history.push('/articles')
+        history.push(ARTICLES)
       })
       .catch((error) => {
         dispatch(handleErrorEdition(error))
@@ -138,7 +142,7 @@ function onArticleEdition(article, history, slug) {
     dispatch(requestArticleAction())
     blogService.editArticle(token, article, slug).then((resp) => {
       dispatch(handleArticleEdition(resp.data.article))
-      history.push('/articles')
+      history.push(ARTICLES)
     })
   }
 }
@@ -150,7 +154,7 @@ function onArticleDelete(slug, history) {
     dispatch(requestArticleAction())
     blogService.deleteArticle(token, slug).then((resp) => {
       handleArticleDelete(resp.data)
-      history.push('/articles')
+      history.push(ARTICLES)
     })
   }
 }
