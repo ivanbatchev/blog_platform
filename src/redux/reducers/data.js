@@ -1,3 +1,4 @@
+import { getInfoFromBrowser } from '../../services/LocalStorageService'
 import { DATA_LOADED, ARTICLE_SELECTED, ERROR_CAUGHT, PAGE_CHANGED, REQUESTED_DATA } from '../actions/actionTypes'
 
 const initialState = {
@@ -7,7 +8,7 @@ const initialState = {
   error: null,
   articlesCount: 0,
   pageCount: 0,
-  selectedArticle: localStorage.getItem('selectedArticle') ? JSON.parse(localStorage.getItem('selectedArticle')) : null,
+  selectedArticle: getInfoFromBrowser('selectedArticle') ? JSON.parse(getInfoFromBrowser('selectedArticle')) : null,
 }
 
 const dataReducer = (state = initialState, action) => {

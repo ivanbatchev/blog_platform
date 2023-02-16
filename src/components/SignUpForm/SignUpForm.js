@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form'
 import { connect } from 'react-redux'
 
 import { onNewUserRegistration, handleNewDataInput } from '../../redux/actions'
+import { SIGN_IN } from '../../routes'
 
 import classes from './SignUpForm.module.scss'
 
@@ -73,10 +74,6 @@ const SignUpForm = ({ onNewUserRegistration, userStatus, requestStatus, handleNe
             required: {
               value: true,
               message: 'This field is required',
-            },
-            pattern: {
-              value: /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/i,
-              message: 'Invalid email address',
             },
           })}
           type="email"
@@ -149,7 +146,7 @@ const SignUpForm = ({ onNewUserRegistration, userStatus, requestStatus, handleNe
         {requestStatus === 'loading' ? <CircularProgress color="warning" size={12} /> : 'Create'}
       </button>
       <div className={classes.haveAccount}>
-        Already have an account? <Link to="/sign-in"> Sign In.</Link>
+        Already have an account? <Link to={SIGN_IN}> Sign In.</Link>
       </div>
     </form>
   )

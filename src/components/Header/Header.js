@@ -4,7 +4,9 @@ import { Link, withRouter } from 'react-router-dom'
 import Snackbar from '@mui/material/Snackbar'
 import MuiAlert from '@mui/material/Alert'
 
+import { ARTICLES, NEW_ARTICLE, PROFILE, SIGN_IN, SIGN_UP } from '../../routes'
 import { userLoggedOut } from '../../redux/actions'
+import { clearSavedInfo, getInfoFromBrowser } from '../../services/LocalStorageService'
 
 import classes from './Header.module.scss'
 
@@ -27,19 +29,23 @@ const Header = ({ isUserLoggedIn, userLoggedOut, history, userStatus, loginError
     setOpenSuccessRegistration(false)
     setOpenOnLoginError(false)
   }
-
+  const handleLogOut = () => {
+    clearSavedInfo()
+    userLoggedOut()
+    history.push(ARTICLES)
+  }
   const noLoginMenu = (
     <ul className={classes.signwrapper}>
       <li className={classes.signinButton}>
-        <Link to="/sign-in">Sign In</Link>
+        <Link to={SIGN_IN}>Sign In</Link>
       </li>
       <li
         className={classes.signupButton}
         onClick={() => {
-          history.push('/sign-up')
+          history.push(SIGN_UP)
         }}
       >
-        <Link to="/sign-up">Sign Up</Link>
+        <Link to={SIGN_UP}>Sign Up</Link>
       </li>
     </ul>
   )
@@ -48,7 +54,7 @@ const Header = ({ isUserLoggedIn, userLoggedOut, history, userStatus, loginError
       <button
         className={classes.createArticleButton}
         onClick={() => {
-          history.push('/new-article')
+          history.push(NEW_ARTICLE)
         }}
       >
         Create article
@@ -56,30 +62,18 @@ const Header = ({ isUserLoggedIn, userLoggedOut, history, userStatus, loginError
       <div
         className={classes.userInfo}
         onClick={() => {
-          history.push('/profile')
+          history.push(PROFILE)
         }}
       >
-        <div>{isUserLoggedIn ? localStorage.getItem('username') : null}</div>
+        <div>{isUserLoggedIn ? getInfoFromBrowser('username') : null}</div>
         {userInfoWhenLoggedIn?.image ? (
           <div
             className={classes.imageContainer}
-            style={{
-              backgroundImage: `url(${userInfoWhenLoggedIn?.image})`,
-              backgroundRepeat: 'no-repeat',
-              backgroundSize: 'cover',
-              backgroundPosition: 'center center',
-            }}
+            style={{ backgroundImage: `url(${userInfoWhenLoggedIn?.image})` }}
           ></div>
         ) : null}
       </div>
-      <button
-        className={classes.logOutButton}
-        onClick={() => {
-          localStorage.clear()
-          userLoggedOut()
-          history.push('/articles')
-        }}
-      >
+      <button className={classes.logOutButton} onClick={handleLogOut}>
         Log out
       </button>
     </div>

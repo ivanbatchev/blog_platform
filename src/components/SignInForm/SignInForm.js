@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import { useForm } from 'react-hook-form'
 
 import { onLoginFormSubmition } from '../../redux/actions'
+import { SIGN_UP } from '../../routes'
 
 import classes from './SignInForm.module.scss'
 
@@ -35,10 +36,6 @@ const SignInForm = ({ onLoginFormSubmition, history }) => {
               value: true,
               message: 'This field is required',
             },
-            pattern: {
-              value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-              message: 'Invalid email address',
-            },
           })}
           placeholder="Email address"
           autoComplete="off"
@@ -65,7 +62,7 @@ const SignInForm = ({ onLoginFormSubmition, history }) => {
         <span>Login</span>
       </button>
       <div className={classes.haveAccount}>
-        Don&rsquo;t have an account? <Link to={'/sign-up'}>Sign Up.</Link>
+        Don&rsquo;t have an account? <Link to={SIGN_UP}>Sign Up.</Link>
       </div>
     </form>
   )

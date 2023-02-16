@@ -3,7 +3,6 @@ import { useForm } from 'react-hook-form'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 
-import { isValidURL } from '../../utils/urlValidator'
 import { onProfileEdition } from '../../redux/actions'
 import Spinner from '../Spinner'
 
@@ -71,10 +70,6 @@ const EditProfile = ({ onProfileEdition, history, requestEditStatus, editError, 
               value: true,
               message: 'This field is required',
             },
-            pattern: {
-              value: /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/i,
-              message: 'Invalid email address',
-            },
           })}
           placeholder="Email address"
           autoComplete="off"
@@ -107,11 +102,9 @@ const EditProfile = ({ onProfileEdition, history, requestEditStatus, editError, 
         Avatar image (url)
         <input
           style={errors?.avatar_image_url ? error : null}
-          type="text"
+          type="url"
           name="avatar_image_url"
-          {...register('avatar_image_url', {
-            validate: (value) => (isValidURL(value) || value === '' ? true : 'This is not valid URL'),
-          })}
+          {...register('avatar_image_url')}
           placeholder="Avatar image"
           autoComplete="off"
         ></input>
